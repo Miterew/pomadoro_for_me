@@ -1,0 +1,25 @@
+
+.main {
+    display: flex;
+    justify-content: space-around;
+    align-items: start;
+    background-color: rgb(134, 229, 205);
+}
+
+.main_timers {
+    font-size: 24px;
+    text-align: center;
+}
+
+.image_pomadoro_img {
+    width: 30vw;
+}
+
+.main_subimages {
+    display: flex;
+    justify-content: center;
+}
+
+.subimages_img {
+    width: 8vw;
+}
