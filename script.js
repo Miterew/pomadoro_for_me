@@ -129,8 +129,8 @@ function showResume() {
     }
 
     let mil = finishDate - startDate;
-    resumeContent.textContent = 'С первого запуска таймера прошло ' + getTimeMs(mil)
-        + ' из них эффективно прошло ' + hours + minutes + seconds;
+    resumeContent.textContent = 'Просидел ' + getTimeMs(mil)
+        + ' из них занимался ' + hours + minutes + seconds;
 }
 
 
