@@ -1,26 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.display_height {
+    min-height: 100vh;
+    background-color: #F9EBDE;
+    display: flex;
+    justify-content: space-around;
+}
+
+.display_centered {
+    display: flex;
+    align-items: center;
+    
+}
 
 .main {
     display: flex;
+    flex-direction: column-reverse;
     justify-content: space-around;
-    align-items: start;
-    background-color: rgb(134, 229, 205);
+    align-items: center;
+
+}
+
+
+.main_buttons {
+    display: flex;
+    justify-content:space-evenly;
+}
+
+.buttons {
+    background-color: #FFA4A7;
+    border: 2px solid #ffffff;
+    font-family: "Montserrat", sans-serif;
+    width: 150px;
+    font-size: 36px;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 0 5px;
+}
+
+.buttons:hover {
+    background-color: rgb(104, 153, 86);
+}
+
+.buttons::selection {
+    border: 2px solid #ffffff;
+    padding: 10px;
+
 }
 
 .main_timers {
-    font-size: 24px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 3em;
     text-align: center;
-    margin: 5px 0;
+    /* display: flex;
+    flex-direction: column; */
+}
 
+.button_pause {
+    border-radius: 20;
 }
 
 .image_pomadoro_img {
     width: 30vw;
+    transition: transform 1s;
+
 }
 
-.main_subimages {
-    display: flex;
-    justify-content: center;
-}
+
 
 .subimages_img {
     width: 8vw;

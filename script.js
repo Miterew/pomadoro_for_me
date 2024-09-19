@@ -1,171 +1,112 @@
 "use strict";
 
-let pomadoroImage = document.querySelector('.image_pomadoro_img');
-let startDate;
+// для ручного редактирования времени пользователем
+let userSetMin = 1;
+let userSetSek = 0;
 
-// блок с фиксацией времени начала обучения
-pomadoroImage.addEventListener('click', function getStartTime() {
-    let date = new Date();
-    startDate = date;
+// копируем сразу данные для редактирования
+let userMin = userSetMin;
+let userSec = userSetSek;
+// подготовка к клику на помидорку
+const pomodoro = document.querySelector('.image_pomadoro_img');
+const timerText = document.querySelector('.actual_timer');
 
-    let hour = date.getHours();
-    let minutes = date.getMinutes();
-    let seconds = date.getSeconds();
+// нажатие на помидорку
+let firstStart = true;
 
-    hour = setZero(hour);
-    minutes = setZero(minutes);
-    seconds = setZero(seconds);
+pomodoro.addEventListener('click', function setTimerStart() {
 
-    let startTimeP = document.querySelector('.start_timer_content');
-
-    let startTimeArr = [hour, minutes, seconds];
-    startTimeP.textContent = 'Начал: ' + hour + ':' + minutes + ':' + seconds;
-    pomadoroImage.removeEventListener('click', getStartTime);
-});
-
-// кнопка паузы
-let pause = document.querySelector('#subimages_img_pause');
-
-pause.addEventListener('click', function setPauseTimer() {
-    clearInterval(currentTimerID);  // Останавливаем текущий таймер
-});
-
-// блок с тикающим таймером времени обучения
-let currentTimerValue;
-
-pomadoroImage.addEventListener('click', function pomadoroTrig() {
-    if (!currentTimerID) { // Передаем нули при первом запуске
-        setActualTimer(0, 0, 0);
-    } else if (currentTimerID) { // Передаем значения в случае паузы
-        let hour = currentTimerValue[0];
-        let minutes = currentTimerValue[1];
-        let seconds = currentTimerValue[2];
-
-        setActualTimer(hour, minutes, seconds);
+    if(isReset && isPaused) {
+        isPaused = false;
     }
-});
 
-// функция тикающего таймера
-let currentTimerID; // создаем глобальный ID тик таймера чтоб потом стопать с любой точки
+    if (isReset) {
+        clearInterval(currentTimerID);
 
-function setActualTimer(hours, minutes, seconds) {
+        timerText.textContent = setZero(userSetMin) + ':' + setZero(userSetSek);
+        isReset = false;
 
-    let actualTimer = document.querySelector('.actual_timer');
-    actualTimer.textContent = setZero(hours) + ':' + setZero(minutes) + ':' + setZero(seconds);
-
-    // Запуск нового таймера
-    currentTimerID = setInterval(function () {
-        seconds++;
-
-        if (seconds == 60) {
-            seconds = 0;
-            minutes++;
-        }
-
-        if (minutes == 60) {
-            hours++;
-            minutes = 0;
-        }
-
-        currentTimerValue = [hours, minutes, seconds]; // сохраняем каждый раз в массив на случай паузы
-        showActualTimer(hours, minutes, seconds);
-    }, 1000);
-
-
-    // функция отображения в актуальном таймере
-    function showActualTimer(hours, minutes, seconds) {
-        hours = setZero(hours);
-        minutes = setZero(minutes);
-        seconds = setZero(seconds);
-
-        actualTimer.textContent = hours + ':' + minutes + ':' + seconds;
+        getTimer(userSetMin, userSetSek);
     }
-}
 
-// функция финиш
-let finish = document.querySelector('#subimages_img_stop');
-let finishDate;
+    if (isPaused) {
+        let lostMin = currentTimerValue[0];
+        let lostSec = currentTimerValue[1];
 
-finish.addEventListener('click', function setStopTimer() {
-    clearInterval(currentTimerID);  // Останавливаем текущий таймер
+        timerText.textContent = setZero(lostMin - 1) + ':' + setZero(lostSec);
 
-    let date = new Date();
-    finishDate = date;
+        isPaused = false;  // Таймер возобновлен
+        getTimer(lostMin, lostSec);  // Возобновляем таймер
+    }
 
-    let hour = date.getHours();
-    let minutes = date.getMinutes();
-    let seconds = date.getSeconds();
+    if (firstStart) {
+        getTimer()
+        timerText.textContent = setZero(userSetMin) + ':' + setZero(userSetSek);
+        firstStart = false;
+    }
 
-    hour = setZero(hour);
-    minutes = setZero(minutes);
-    seconds = setZero(seconds);
-
-    let finishTimerContent = document.querySelector('.finish_timer_content');
-
-    finishTimerContent.textContent = 'Закончил: ' + hour + ':' + minutes + ':' + seconds;
-    showResume();
 })
 
 
-// функция подведения заключения (резюмируя)
+// Кнопка сброс
+const resetButton = document.querySelector('#button_reset');
 
-function showResume() {
-    let resumeContent = document.querySelector('.resume_content');
+let isReset = false;
 
-    let hours = '';
-    let minutes = '';
-    let seconds = '';
+resetButton.addEventListener('click', function setReset() {
+    clearInterval(currentTimerID);
+    timerText.textContent = setZero(userSetMin) + ':' + setZero(userSetSek);
+    isReset = true;
+});
 
-    if (currentTimerValue[0]) {
-        hours = currentTimerValue[0] + ' ч ';
+
+// Кнопка паузы
+const pauseButton = document.querySelector('#button_pause');
+
+let isPaused = false;
+pauseButton.addEventListener('click', function setPause() {
+    clearInterval(currentTimerID);
+    isPaused = true;  // Таймер на паузе
+});
+
+
+// Секция с основным таймером
+let currentTimerID; // глобальная переменная с айди запущенного таймера
+let currentTimerValue; // текущее значение таймера 
+
+// функция старта и ресета
+function getTimer(userMin, secStartMoment) {
+    if (!secStartMoment) {
+        secStartMoment = 60;
     }
 
-    if (currentTimerValue[1]) {
-        minutes = currentTimerValue[1] + ' мин ';
+    if (!userMin) {
+        userMin = userSetMin;
     }
 
-    if (currentTimerValue[2] != 0) {
-        seconds = currentTimerValue[2] + ' сек ';
-    }
+    currentTimerID = setInterval(function () {
+        secStartMoment--;
 
-    let mil = finishDate - startDate;
-    resumeContent.textContent = 'Просидел ' + getTimeMs(mil)
-        + ' из них занимался ' + hours + minutes + seconds;
+        timerText.textContent = setZero(userMin - 1) + ':' + (setZero(secStartMoment));
+
+        if (secStartMoment == 0) {
+            secStartMoment = 60;
+            userMin--;
+        }
+
+        if (userMin == 0 && secStartMoment == 60) {
+            alert('Таймер завершен!');
+            clearInterval(currentTimerID);
+        };
+
+        currentTimerValue = [userMin, secStartMoment];
+    }, 1000);
 }
 
-
-// функция определяет сколько прошло времени получая миллисекунды - с этой функцией помог GPT
-function getTimeMs(mill) {
-    let sec = '';
-    let min = '';
-    let hour = '';
-
-    let seconds = Math.floor(mill / 1000);
-    let hours = Math.floor(seconds / 3600);
-    seconds %= 3600;
-    let minutes = Math.floor(seconds / 60);
-    seconds %= 60;
-
-    if (hours > 0) {
-        hour = hours + ' ч ';
-    }
-    if (minutes > 0) {
-        min = minutes + ' мин ';
-    }
-    if (seconds > 0 || (hours === 0 && minutes === 0)) {
-        sec = seconds + ' сек';
-    }
-
-    return `${hour}${min}${sec}`;
-}
-
-
-
-// функция добавляющая 0 перед временем
+// Функция визуального добавления второго нуля
 function setZero(number) {
-    if (number < 10) {
-        number = '0' + number;
+    if (number < 10 && number >= 0) {
+        number = '0' + number
     }
-
     return number;
 }
