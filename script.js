@@ -1,22 +1,73 @@
 "use strict";
 
 // для ручного редактирования времени пользователем
-let userSetMin = 1;
+let userSetMin = 25;
 let userSetSek = 0;
+const title = document.title;
+
 
 // копируем сразу данные для редактирования
 let userMin = userSetMin;
 let userSec = userSetSek;
 // подготовка к клику на помидорку
-const pomodoro = document.querySelector('.image_pomadoro_img');
+
+let play = document.querySelector('#button_play');
+let pause = document.querySelector('#button_pause');
+
 const timerText = document.querySelector('.actual_timer');
 
 // нажатие на помидорку
 let firstStart = true;
 
-pomodoro.addEventListener('click', function setTimerStart() {
+play.addEventListener('click', function setTimerStart() {
+    setStartTimer();
+})
 
-    if(isReset && isPaused) {
+
+// Кнопка сброс
+const resetButton = document.querySelector('#button_reset');
+
+let isReset = false;
+
+resetButton.addEventListener('click', function setReset() {
+    clearInterval(currentTimerID);
+    timerText.textContent = setZero(userSetMin) + ':' + setZero(userSetSek);
+    isReset = true;
+
+    if (!isPaused) {
+        pause.classList.toggle('hidden');
+        play.classList.toggle('hidden');
+    }
+});
+
+
+// Кнопка паузы
+const pauseButton = document.querySelector('#button_pause');
+
+let isPaused = false;
+pauseButton.addEventListener('click', function setPause() {
+    clearInterval(currentTimerID);
+    isPaused = true;  // Таймер на паузе
+
+    play.classList.toggle('hidden');
+    pause.classList.toggle('hidden');
+
+});
+
+// Кнопка настроек
+const settingsS = document.querySelector('#button_settings');
+
+settingsS.addEventListener('click', function openSettings() {
+    console.log('Нажали настройку')
+});
+
+
+// функция запуска таймера в зависимости от параметра
+function setStartTimer() {
+    play.classList.toggle('hidden');
+    pause.classList.toggle('hidden');
+
+    if (isReset && isPaused) {
         isPaused = false;
     }
 
@@ -37,6 +88,7 @@ pomodoro.addEventListener('click', function setTimerStart() {
 
         isPaused = false;  // Таймер возобновлен
         getTimer(lostMin, lostSec);  // Возобновляем таймер
+        
     }
 
     if (firstStart) {
@@ -45,29 +97,7 @@ pomodoro.addEventListener('click', function setTimerStart() {
         firstStart = false;
     }
 
-})
-
-
-// Кнопка сброс
-const resetButton = document.querySelector('#button_reset');
-
-let isReset = false;
-
-resetButton.addEventListener('click', function setReset() {
-    clearInterval(currentTimerID);
-    timerText.textContent = setZero(userSetMin) + ':' + setZero(userSetSek);
-    isReset = true;
-});
-
-
-// Кнопка паузы
-const pauseButton = document.querySelector('#button_pause');
-
-let isPaused = false;
-pauseButton.addEventListener('click', function setPause() {
-    clearInterval(currentTimerID);
-    isPaused = true;  // Таймер на паузе
-});
+}
 
 
 // Секция с основным таймером
@@ -100,6 +130,7 @@ function getTimer(userMin, secStartMoment) {
         };
 
         currentTimerValue = [userMin, secStartMoment];
+        document.title = title + ' ' + setZero(userMin - 1) + ':' + (setZero(secStartMoment));
     }, 1000);
 }
 
@@ -110,3 +141,5 @@ function setZero(number) {
     }
     return number;
 }
+
+
