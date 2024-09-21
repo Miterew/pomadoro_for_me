@@ -6,7 +6,7 @@ body {
 
 
 .wrapper {
-     background-image: url("/img/background.jpg");
+     background-image: url("img/background.jpg");
     background-size: cover;
     background-color: #793D71; 
      background-attachment: fixed; 
@@ -25,6 +25,23 @@ body {
     color: white;
     font-size: 10em;
     margin: 0 10 0 10;
+}
+
+.main_settings {
+    margin-bottom: 30px;
+}
+
+.settings_text {
+    font-size: 3em;
+    color: white;
+}
+
+.settings_input {
+    color: white;
+    font-size: 2em;
+    background-color: transparent;
+    border-color: white;
+    width: 100px;
 }
 
 .main_buttons {

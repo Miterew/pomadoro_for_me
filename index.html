@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Помидорка</title>
+    <link type="image/x-icon" href="favicon.ico" rel="shortcut icon">
     <link rel="stylesheet" href="normalize.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,25 +16,30 @@
         <div class="main_section">
             
             <div class="main_actual">
-                <h2 class="actual_timer">25:00</h2>
+                <h2 class="actual_timer"></h2>
+            </div>
+
+            <div class="main_settings hidden">
+                <p class="settings_text">Минут работы</p>
+                 <input type="text" value="Минут" class="settings_input">
             </div>
 
             <div class="main_buttons">
                 
                 <div id="button_reset" class="buttons">
-                    <img src="/img/white/refresh.png" class="button_image" alt="Кнопка сброса">
+                    <img src="img/white/refresh.png" class="button_image" alt="Кнопка сброса">
                 </div>
 
                 <div id="button_play" class="buttons">
-                    <img src="/img/white/play.png" class="button_image_pp" alt="Кнопка запуска">
+                    <img src="img/white/play.png" class="button_image_pp" alt="Кнопка запуска">
                 </div>
 
                 <div id="button_pause" class="buttons hidden">
-                    <img src="/img/white/pause.png" class="button_image_pp" alt="Кнопка паузы">
+                    <img src="img/white/pause.png" class="button_image_pp" alt="Кнопка паузы">
                 </div>
 
                 <div id="button_settings" class="buttons">
-                    <img src="/img/white/settings.png" class="button_image" alt="Кнопка настроек">
+                    <img src="img/white/settings.png" class="button_image" alt="Кнопка настроек">
                 </div>
 
             </div>
@@ -42,6 +48,7 @@
     </div>
 
     <script src="script.js"></script>
+    <script src="settings.js"></script>
 </body>
 
 </html>

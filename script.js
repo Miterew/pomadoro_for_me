@@ -16,11 +16,15 @@ let pause = document.querySelector('#button_pause');
 
 const timerText = document.querySelector('.actual_timer');
 
+timerText.textContent = setZero(userSetMin) + ':' + setZero(userSetSek);
+
 // нажатие на помидорку
 let firstStart = true;
+let startDate;
 
 play.addEventListener('click', function setTimerStart() {
     setStartTimer();
+    startDate = new Date();
 })
 
 
@@ -52,13 +56,6 @@ pauseButton.addEventListener('click', function setPause() {
     play.classList.toggle('hidden');
     pause.classList.toggle('hidden');
 
-});
-
-// Кнопка настроек
-const settingsS = document.querySelector('#button_settings');
-
-settingsS.addEventListener('click', function openSettings() {
-    console.log('Нажали настройку')
 });
 
 
@@ -104,6 +101,9 @@ function setStartTimer() {
 let currentTimerID; // глобальная переменная с айди запущенного таймера
 let currentTimerValue; // текущее значение таймера 
 
+
+let nowDate;
+
 // функция старта и ресета
 function getTimer(userMin, secStartMoment) {
     if (!secStartMoment) {
@@ -130,9 +130,12 @@ function getTimer(userMin, secStartMoment) {
         };
 
         currentTimerValue = [userMin, secStartMoment];
-        document.title = title + ' ' + setZero(userMin - 1) + ':' + (setZero(secStartMoment));
+        document.title = setZero(userMin - 1) + ':' + (setZero(secStartMoment));
+
     }, 1000);
 }
+
+
 
 // Функция визуального добавления второго нуля
 function setZero(number) {
@@ -141,5 +144,65 @@ function setZero(number) {
     }
     return number;
 }
+
+
+
+
+
+
+
+// НОВЫЙ ТАЙМЕР
+
+// Функция отсчета разницы времени с нажатия старта до текущего момента
+function showCurrentMomentInterval() {
+    nowDate = new Date();
+    let currentIntervalSeconds = Math.floor( (nowDate - startDate) / 1000);
+
+    console.log( currentIntervalSeconds );
+    return currentIntervalSeconds;
+}
+
+// новый таймер интервал
+function newTimer(userMin, secStartMoment) {
+
+    currentTimerID = setInterval(function () {
+        if(countSecondsToStop == showCurrentMomentInterval()) {
+            clearInterval(currentTimerID);
+            alert('Таймер завершен!');
+        }
+
+        secStartMoment--;
+
+        timerText.textContent = setZero(userMin - 1) + ':' + (setZero(secStartMoment));
+        currentTimerValue = [userMin, secStartMoment];
+        document.title = setZero(userMin - 1) + ':' + (setZero(secStartMoment));
+
+        
+    }, 100);
+
+}
+
+// логика циферблата
+let countSecondsToStop = userMin * 60 + secStartMoment;
+
+function displayLogic(userMin, secStartMoment) {
+    if (!secStartMoment) {
+        secStartMoment = 60;
+    }
+
+    if (!userMin) {
+        userMin = userSetMin;
+    }
+
+    if (secStartMoment == 0) {
+        secStartMoment = 60;
+        userMin--;
+    }
+
+
+}
+
+
+
 
 
