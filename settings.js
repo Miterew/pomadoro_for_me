@@ -16,5 +16,12 @@ settingsInputMin.addEventListener('change', function() {
 
 settingsInputMin.addEventListener('blur', function() {
     settingsDiv.classList.toggle('hidden');
+    
+    //
+    clearInterval(currentTimerID);
+
+    timerText.textContent = setZero(userSetMin) + ':' + setZero(userSetSek);
+
+    getTimer(userSetMin, userSetSek);
 });
 

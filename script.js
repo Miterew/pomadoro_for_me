@@ -25,6 +25,10 @@ let startDate;
 play.addEventListener('click', function setTimerStart() {
     setStartTimer();
     startDate = new Date();
+
+    let audio = new Audio();
+    audio.src = 'src/start.wav';
+    audio.autoplay = true;
 })
 
 
@@ -34,6 +38,11 @@ const resetButton = document.querySelector('#button_reset');
 let isReset = false;
 
 resetButton.addEventListener('click', function setReset() {
+
+    if(firstStart) {
+        return;
+    }
+
     clearInterval(currentTimerID);
     timerText.textContent = setZero(userSetMin) + ':' + setZero(userSetSek);
     isReset = true;
@@ -42,6 +51,10 @@ resetButton.addEventListener('click', function setReset() {
         pause.classList.toggle('hidden');
         play.classList.toggle('hidden');
     }
+
+    let audio = new Audio();
+    audio.src = 'src/reset.wav';
+    audio.autoplay = true;
 });
 
 
@@ -124,14 +137,19 @@ function getTimer(userMin, secStartMoment) {
             userMin--;
         }
 
-        if (userMin == 0 && secStartMoment == 60) {
-            alert('Таймер завершен!');
-            clearInterval(currentTimerID);
-        };
-
         currentTimerValue = [userMin, secStartMoment];
         document.title = setZero(userMin - 1) + ':' + (setZero(secStartMoment));
 
+
+        if (userMin == 0 && secStartMoment == 60) {
+            clearInterval(currentTimerID);
+
+            document.title = 'Таймер завершен';
+
+            let audio = new Audio();
+            audio.src = 'src/finish.wav';
+            audio.autoplay = true;
+        };
     }, 1000);
 }
 
@@ -144,65 +162,3 @@ function setZero(number) {
     }
     return number;
 }
-
-
-
-
-
-
-
-// НОВЫЙ ТАЙМЕР
-
-// Функция отсчета разницы времени с нажатия старта до текущего момента
-function showCurrentMomentInterval() {
-    nowDate = new Date();
-    let currentIntervalSeconds = Math.floor( (nowDate - startDate) / 1000);
-
-    console.log( currentIntervalSeconds );
-    return currentIntervalSeconds;
-}
-
-// новый таймер интервал
-function newTimer(userMin, secStartMoment) {
-
-    currentTimerID = setInterval(function () {
-        if(countSecondsToStop == showCurrentMomentInterval()) {
-            clearInterval(currentTimerID);
-            alert('Таймер завершен!');
-        }
-
-        secStartMoment--;
-
-        timerText.textContent = setZero(userMin - 1) + ':' + (setZero(secStartMoment));
-        currentTimerValue = [userMin, secStartMoment];
-        document.title = setZero(userMin - 1) + ':' + (setZero(secStartMoment));
-
-        
-    }, 100);
-
-}
-
-// логика циферблата
-let countSecondsToStop = userMin * 60 + secStartMoment;
-
-function displayLogic(userMin, secStartMoment) {
-    if (!secStartMoment) {
-        secStartMoment = 60;
-    }
-
-    if (!userMin) {
-        userMin = userSetMin;
-    }
-
-    if (secStartMoment == 0) {
-        secStartMoment = 60;
-        userMin--;
-    }
-
-
-}
-
-
-
-
-
