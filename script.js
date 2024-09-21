@@ -43,6 +43,11 @@ resetButton.addEventListener('click', function setReset() {
         return;
     }
 
+    if(isFinished){
+        play.classList.toggle('hidden');
+        pause.classList.toggle('hidden');
+    }
+
     clearInterval(currentTimerID);
     timerText.textContent = setZero(userSetMin) + ':' + setZero(userSetSek);
     isReset = true;
@@ -81,6 +86,15 @@ function setStartTimer() {
         isPaused = false;
     }
 
+    if(isFinished){
+        clearInterval(currentTimerID);
+
+        timerText.textContent = setZero(userSetMin) + ':' + setZero(userSetSek);
+        isFinished = false;
+
+        getTimer(userSetMin, userSetSek);
+    }
+
     if (isReset) {
         clearInterval(currentTimerID);
 
@@ -116,6 +130,7 @@ let currentTimerValue; // текущее значение таймера
 
 
 let nowDate;
+let isFinished;
 
 // функция старта и ресета
 function getTimer(userMin, secStartMoment) {
@@ -149,6 +164,10 @@ function getTimer(userMin, secStartMoment) {
             let audio = new Audio();
             audio.src = 'src/finish.wav';
             audio.autoplay = true;
+
+            play.classList.toggle('hidden');
+            pause.classList.toggle('hidden');
+            isFinished = true;
         };
     }, 1000);
 }

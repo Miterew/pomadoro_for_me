@@ -18,6 +18,7 @@ settingsInputMin.addEventListener('blur', function() {
     settingsDiv.classList.toggle('hidden');
     
     //
+    isReset = true;
     clearInterval(currentTimerID);
 
     timerText.textContent = setZero(userSetMin) + ':' + setZero(userSetSek);
